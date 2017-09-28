@@ -5,17 +5,25 @@
 #include <conio.h>
 #include <string>
 #include <istream>
+#include <fstream>
+#include <cstring>
+#include <time.h>
 
 using namespace std;
 
 //Inizializzazione delle variabili.giocatore.
 struct Player{
-    string name;
-    string surname;
-    string playerclass;
+    char name[50];
+    char surname[50];
+    char playerclass[50];
     int hp, atk, mag, exp;
     int level = 1;
     int nextlevel = 15;
+    int coins = 0;
+    int archer_level;
+    int warrior_level;
+    int mage_level;
+    int knight_level;
 };
 
 Player player;
@@ -37,10 +45,15 @@ Dummy dummy;
 void menu();
 void play();
 void settings();
+void shop();
 void chooseclass();
 void summary();
 void statistics();
 void playerup();
+
+//Gestione profilo
+void save();
+void load();
 
 //Training zones
 void training_zone_1();
@@ -52,6 +65,25 @@ void training_zone_finish();
 int main(int argc, char* argv[])
 {
     system("cls");
+    srand(time(NULL));
+    int selection;
+    load();
+    cout << "Load saved data?\n\nPress 1 for yes, 0 for no.\n\n";
+    cin >> selection;
+    if(selection==1) {
+        load();
+        summary();
+    } else {
+        strcpy(player.name, "No name");
+        strcpy(player.surname, "No surname");
+        player.archer_level = 1;
+        player.mage_level = 1;
+        player.knight_level = 1;
+        player.warrior_level = 1;
+        player.level = 1;
+        save();
+    }
+    system("cls");
     menu();
 }
 
@@ -59,7 +91,7 @@ int main(int argc, char* argv[])
 void menu(){
     system("cls");
     int selection;
-    cout << "Welcome to OpenTextRPG.\n\nSelect an option.\n\n\t1-Play\n\t2-Settings\n\t3-Exit\n\n";
+    cout << "Welcome to OpenTextRPG.\n\nSelect an option.\n\n\t1-Play\n\t2-Settings\n\t3-Shop\n\t4-Exit\n";
     cin >> selection;
     switch(selection){
     case(1):
@@ -69,6 +101,9 @@ void menu(){
         settings();
         break;
     case(3):
+        shop();
+        break;
+    case(4):
         exit(0);
         break;
     default:
@@ -83,9 +118,13 @@ void play(){
     int selection;
     cout << "Choose a name.\n\n";
     cin.ignore();
-    getline(cin, player.name);
+    string name;
+    getline(cin, name);
+    strcpy(player.name, name.c_str());
     cout << "\nChoose a surname.\n\n";
-    getline(cin, player.surname);
+    string surname;
+    getline(cin, surname);
+    strcpy(player.surname, surname.c_str());
     cout << "\nSo, you are " << player.name << " " << player.surname << "?\n\nPress 1 for yes, 0 for no.\n\n";
     cin >> selection;
     switch(selection){
@@ -106,6 +145,54 @@ void settings(){
     menu();
 }
 
+//Negozio per potenziamenti.
+void shop() {
+    system("cls");
+    cout << "What class do you want to level up?\n\n\t1. Archer\n\t2. Knight\n\t3. Mage\n\t4. Warrior\n5. Nothing, Go back\n\n";
+    int selection;
+    cin >> selection;
+    int* level;
+    switch(selection)
+    {
+        case(1): level = &player.archer_level; break;
+        case(2): level = &player.knight_level; break;
+        case(3): level = &player.mage_level; break;
+        case(4): level = &player.warrior_level; break;
+        case(5): menu();
+    }
+    int coins_needed;
+    switch(*level)
+    {
+        case(1): coins_needed = 25; break;
+        case(2): coins_needed = 100; break;
+        case(3): coins_needed = 250; break;
+        case(4): coins_needed = 500; break;
+        case(5): coins_needed = 1000; break;
+        case(6): coins_needed = 2500; break;
+        case(7): coins_needed = 5000; break;
+        case(8): coins_needed = 10000; break;
+        case(9): coins_needed = 15000; break;
+        case(10): coins_needed = 20000; break;
+    }
+    system("cls");
+    if(player.coins>=coins_needed) {
+        cout << "Do you want to spend " << coins_needed << " coins?\n\nPress 1 for yes, Press 0 for no.\n\n";
+        cin >> selection;
+        if(selection==1) {
+            *level++;
+            player.coins-=coins_needed;
+        }
+        else shop();
+    } else
+    {
+        cout << "You need " << coins_needed-player.coins << " coins.\n\n";
+        getch();
+        shop();
+    }
+
+
+}
+
 //Selezione della classe.
 void chooseclass(){
     system("cls");
@@ -114,28 +201,28 @@ void chooseclass(){
     cin >> selection;
     switch(selection){
     case(1):
-        player.playerclass = "Archer";
-        player.hp = 20;
-        player.atk = 25;
-        player.mag = 10;
+        strcpy(player.playerclass, "Archer");
+        player.hp = 20*player.archer_level;
+        player.atk = 25*player.archer_level;
+        player.mag = 10*player.archer_level;
         break;
     case(2):
-        player.playerclass = "Knight";
-        player.hp = 70;
-        player.atk = 25;
-        player.mag = 10;
+        strcpy(player.playerclass, "Knight");
+        player.hp = 70*player.knight_level;
+        player.atk = 25*player.knight_level;
+        player.mag = 10*player.knight_level;
         break;
     case(3):
-        player.playerclass = "Mage";
-        player.hp = 30;
-        player.atk = 10;
-        player.mag = 30;
+        strcpy(player.playerclass, "Mage");
+        player.hp = 30*player.mage_level;
+        player.atk = 10*player.mage_level;
+        player.mag = 30*player.mage_level;
         break;
     case(4):
-        player.playerclass = "Warrior";
-        player.hp = 50;
-        player.atk = 45;
-        player.mag = 10;
+        strcpy(player.playerclass, "Warrior");
+        player.hp = 50*player.warrior_level;
+        player.atk = 45*player.warrior_level;
+        player.mag = 10*player.warrior_level;
         break;
     default:
         chooseclass();
@@ -145,6 +232,7 @@ void chooseclass(){
     cout << "\nSo, you are " << player.name << " " << player.surname << ", the " << player.playerclass << "?\n\nPress 1 for yes, 0 for no.\n\n";
     cin >> confirm;
     if(confirm == 1){
+        save();
         summary();
         exit(0);
     }else{
@@ -156,7 +244,7 @@ void chooseclass(){
 void summary(){
     system("cls");
     int selection;
-    cout << "This is a summary of your choices\n\nName: " << player.name << "\nSurname: " << player.surname << "\nClass: " << player.playerclass << "\nHealth Points: " << player.hp << "\nAttack: " << player.atk << "\nMagic: " << player.mag << "\n\n";
+    cout << "This is a summary of your choices\n\nName: " << player.name << "\nSurname: " << player.surname << "\nClass: " << player.playerclass << "\nPlayer Level: " << player.level << "\nHealth Points: " << player.hp << "\nAttack: " << player.atk << "\nMagic: " << player.mag << "\n\n";
     cout << "Do you want to edit something?\n\t1-Name and Surname\n\t2-Class\n\t3-Go ahead\n\t4-Main Menu\n\n";
     cin >> selection;
     switch(selection){
@@ -167,7 +255,9 @@ void summary(){
         chooseclass();
         break;
     case(3):
-        training_zone_1();
+        if(player.level==1) training_zone_1();
+        else if(player.level==2) cout << "Trainer: I think you don't need me anymore.\n\n";
+        getch();
         break;
     case(4):
         menu();
@@ -309,7 +399,8 @@ void training_zone_battle(){
     cout << dummy.name << " dies.\n";
     getch();
     player.exp += dummy.exp;
-    cout << "\n" << player.name << " gains " << dummy.exp << " experience points.\n\n";
+    cout << "\n" << player.name << " gains " << dummy.exp << " experience points.\n";
+    cout << "\n" << player.name << " gains " << rand()%5+1 << " coin/s.\n\n";
     getch();
     system("cls");
     if(player.exp >= player.nextlevel){
@@ -334,6 +425,7 @@ void statistics(){
 void training_zone_finish(){
     system("cls");
     cout << "Congratulations, you finished the alpha. Here's a virtual cup for you.\n";
+    save();
     getch();
     exit(0);
 }
@@ -360,4 +452,15 @@ void playerup(){
         break;
     }
     statistics();
+}
+
+void save()
+{
+    ofstream ofs("data.dat", ios::binary);
+    ofs.write((char*)&player, sizeof(Player));
+}
+void load()
+{
+    ifstream ifs("data.dat", ios::binary);
+    ifs.read((char*)&player, sizeof(Player));
 }
