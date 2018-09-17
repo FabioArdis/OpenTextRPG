@@ -895,7 +895,7 @@ void Engine::Pause()
     cout << "Pause Menu\n\n1-Return\n2-Save\n3-Main Menu\n4-Exit Game\n\n";
     cin >> selection;
     #else
-    cout << "Pause Menu\n\nL-Return\nR-Save\n3ZL-Main Menu\nZR-Exit Game\n\n";
+    cout << "Pause Menu\n\nL-Return\nR-Save\nZL-Main Menu\nZR-Exit Game\n\n";
     selection = getnum();
     #endif
     switch(selection)
