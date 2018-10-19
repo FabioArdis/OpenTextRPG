@@ -425,9 +425,7 @@ RLUTIL_INLINE void cls(void) {
 	RLUTIL_PRINT(ANSI_CURSOR_HOME);
 #else
 	consoleClear();
-	gfxFlushBuffers();
-	gfxSwapBuffers();
-	gfxWaitForVsync();
+	consoleUpdate(NULL);
 #endif
 #endif
 }
