@@ -1,18 +1,10 @@
 #include "Player.h"
 
-Player::Player()
-{
-    name = "PlayerName";
-	surname = "PlayerSurname";
-	playerclass = "Test";
-	hp = 50;
-	atk = 20;
-	mag = 20;
-	exp = 0;
-	maxHp = 50;
-	level = 1;
-	nextlevel = 15;
-	actualZone = 1;
-	x = 3;
-	y = 3;
-};
+void Player::Use(Cure c) {
+	hp += c.CurePoints;
+	if(hp > maxHp) {
+		hp = maxHp;
+	}
+	std::cout << name << " gained " << c.CurePoints << " HP.\n";
+	std::cout << name << " HP = " << hp << std::endl;
+}

@@ -1,40 +1,36 @@
 #pragma once
 
 #include <iostream>
-#include <ctime>
-#include <fstream>
-#include <vector>
-#include <iterator>
 
 #include "Player.h"
 #include "Enemy.h"
 #include "Game.h"
 #include "Location.h"
-#include "Item.h"
 
-class Engine
-{
+class Engine final {
 public:
-    Engine();
-    void CreateItems();
+    Engine() = default;
+    virtual compl Engine() = default;
+    
+    void CreateItems(void);
     void Battle(Enemy enemy);
     void Battle(Dummy dummy);
-    void Start();
-    void Play();
-    void Save();
-    void Load();
-    void Pause();
-    void PlayerUp();
-    void Stats();
+    void Start(void);
+    void Play(void);
+    void Save(void);
+    void Load(void);
+    void Pause(void);
+    void PlayerUp(void);
+    void Stats(void);
     void Magic(Enemy& enemy);
     void Magic(Dummy& dummy);
-    void Items();
-    void Randomize();
-    void ChooseClass();
-    void Summary();
-    void TrainingZone1();
-    void TrainingZone2();
-    void TrainingZoneBattle();
+    void Items(void);
+    void Randomize(void);
+    void ChooseClass(void);
+    void Summary(void);
+    void TrainingZone1(void);
+    void TrainingZone2(void);
+    void TrainingZoneBattle(void) = delete;
     template <size_t rows, size_t columns>
     void UpdateDungeon(string (&iDungeon)[rows][columns]);
 };

@@ -2,27 +2,31 @@
 
 #include <string>
 #include <iostream>
-#include "Player.h"
 
 using namespace std;
 
-class Item
-{
+class Item {
 public:
-    string name, description;
-    int value, position, num, id;
-    Item();
+    Item() = default;
+    virtual compl Item() = default;
+    
+    string name = "ItemTest";
+    string description = "DescriptionTest";
+    int value = 10;
+    int position = 1;
+    int num = 1;
+    int id = 0;
+    
     void Add(Item item);
     void Remove(Item item);
-    void Show();
+    void Show(void);
 };
 
-class Cure: public Item
-{
+class Cure: public Item {
 public:
-    int CurePoints;
-    void Use(Player player);
-    Cure(string newName, string newDescription, int newValue, int newCurePoints);
+    Cure() = default;
+    explicit Cure(string const& newName, string const& newDescription, int newValue, int newCurePoints);
+    virtual compl Cure() = default;
+    
+    int CurePoints = 0;
 };
-
-

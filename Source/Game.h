@@ -34,20 +34,7 @@
 #else // _MSC_VER
 #define RLUTIL_INLINE static __inline__
 #endif // _MSC_VER
-#endif // RLUTIL_INLINE
-
-#ifndef FIONREAD
-#ifndef _IOR(x,y,t)
-#ifndef IOCPARM_MASK
-#define IOCPARM_MASK 0x7f
-#endif // IOCPARM_MASK
-#ifndef IOC_OUT
-#define IOC_OUT 0x40000000
-#endif // IOC_OUT
-#define _IOR(x,y,t)     (IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
-#endif // _IOR
-#define FIONREAD _IOR('f', 127, u_long)
-#endif // FIONREAD
+#endif // RLUTIL_INLINE												
 
 #ifdef __cplusplus
 #include <iostream>
@@ -64,6 +51,7 @@ RLUTIL_INLINE void locate(int x, int y);
 
 #ifdef _WIN32
 #include <windows.h>
+#include <winsock.h>
 #define _NO_OLDNAMES
 #include <conio.h>
 #define getch _getch
@@ -113,6 +101,22 @@ RLUTIL_INLINE int kbhit(void) {
 }
 #endif // __SWITCH__
 #endif // _WIN32
+
+#ifndef IOC_OUT													
+#define IOC_OUT 0x40000000										
+#endif															
+
+#ifndef IOCPARM_MASK											
+#define IOCPARM_MASK 0x7f										
+#endif															
+
+#ifndef _IOR(x,y,t)																													
+#define _IOR(x,y,t)	(IOC_OUT|(((long)sizeof(t)&IOCPARM_MASK)<<16)|((x)<<8)|(y))
+#endif																				
+
+#ifndef FIONREAD												
+#define FIONREAD _IOR('f', 127, u_long)							
+#endif			
 
 #ifndef gotoxy
 

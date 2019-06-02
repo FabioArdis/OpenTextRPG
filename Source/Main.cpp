@@ -1,10 +1,8 @@
 #include "Engine.h"
 
-Engine iEngine;
+Engine iEngine{};
 
-
-int main()
-{
+int main() {
 
 	#ifdef __SWITCH__
 	consoleInit(NULL);

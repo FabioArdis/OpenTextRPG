@@ -1,18 +1,23 @@
 #include "Location.h"
 
-Location::Location()
-{
-    for(int x = 0; x < 10; x++)
-        Dungeon1[x][0] = "X";
-    for(int y = 1; y < 10; y++)
-        Dungeon1[0][y] = "X";
-    for(int x = 1; x < 9; x++)
-        for(int y = 1; y < 9; y++)
-            Dungeon1[x][y] = " ";
-    for(int x = 1; x < 10; x++)
-        Dungeon1[x][9] = "X";
-    for(int y = 1; y < 10; y++)
-        Dungeon1[9][y] = "X";
+Location::Location() {
+    for(int j = 0; j < 10; j++) {
+        Dungeon1[j][0] = "X";
+    }
+    for(int i = 1; i < 10; i++) {
+        Dungeon1[0][i] = "X";
+    }
+    for(int j = 1; j < 9; j++) {
+        for(int i = 1; i < 9; i++) {
+            Dungeon1[j][i] = " ";
+        }
+    }
+    for(int j = 1; j < 10; j++) {
+        Dungeon1[j][9] = "X";
+    }
+    for(int i = 1; i < 10; i++) {
+        Dungeon1[9][i] = "X";
+    }
     Dungeon1[6][5] = "X";
     Dungeon1[4][2] = "X";
 }
